@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2048
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogCrud.Web", "CatalogCrud.Web\CatalogCrud.Web.csproj", "{2F41558A-7114-49AC-8AD6-BEDFA7C87EFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogCrud.DAL", "CatalogCrud.DAL\CatalogCrud.DAL.csproj", "{D44DAA0F-9714-4F53-BE91-E769851CFBC4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F41558A-7114-49AC-8AD6-BEDFA7C87EFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F41558A-7114-49AC-8AD6-BEDFA7C87EFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F41558A-7114-49AC-8AD6-BEDFA7C87EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F41558A-7114-49AC-8AD6-BEDFA7C87EFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D44DAA0F-9714-4F53-BE91-E769851CFBC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D44DAA0F-9714-4F53-BE91-E769851CFBC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D44DAA0F-9714-4F53-BE91-E769851CFBC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D44DAA0F-9714-4F53-BE91-E769851CFBC4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E2CCF1E0-1157-4F2A-A2B2-10A840BBAA0E}
+	EndGlobalSection
+EndGlobal
