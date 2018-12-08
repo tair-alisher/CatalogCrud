@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogCrud.Web", "CatalogC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogCrud.DAL", "CatalogCrud.DAL\CatalogCrud.DAL.csproj", "{D44DAA0F-9714-4F53-BE91-E769851CFBC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogCrud.BLL", "CatalogCrud.BLL\CatalogCrud.BLL.csproj", "{BE164F1F-49B2-496D-832A-3E27FC50543E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D44DAA0F-9714-4F53-BE91-E769851CFBC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D44DAA0F-9714-4F53-BE91-E769851CFBC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D44DAA0F-9714-4F53-BE91-E769851CFBC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE164F1F-49B2-496D-832A-3E27FC50543E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE164F1F-49B2-496D-832A-3E27FC50543E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE164F1F-49B2-496D-832A-3E27FC50543E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE164F1F-49B2-496D-832A-3E27FC50543E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
