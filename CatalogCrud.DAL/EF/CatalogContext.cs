@@ -11,32 +11,34 @@ namespace CatalogCrud.DAL.EF
         public DbSet<Field> Fields { get; set; }
         public DbSet<Value> Values { get; set; }
 
+        static CatalogContext() { Database.SetInitializer<CatalogContext>(null); }
+        public CatalogContext(string connection) : base(connection) { }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
-            modelBuilder.Entity<Catalog>()
-                .HasMany<Field>(c => c.Fields)
-                .WithMany(f => f.Catalogs)
-                .Map(cf =>
-                {
-                    cf.MapLeftKey("CatalogId");
-                    cf.MapRightKey("FieldId");
-                    cf.ToTable("CatalogField");
-                });
+            base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Value>()
-                .HasRequired(v => v.Field)
-                .WithMany(f => f.Values)
-                .HasForeignKey(v => v.FieldId);
+            //modelBuilder.Entity<Catalog>()
+            //    .HasMany<Field>(c => c.Fields)
+            //    .WithMany(f => f.Catalogs)
+            //    .Map(cf =>
+            //    {
+            //        cf.MapLeftKey("CatalogId");
+            //        cf.MapRightKey("FieldId");
+            //        cf.ToTable("CatalogField");
+            //    });
 
-            modelBuilder.Entity<Value>()
-                .HasRequired(v => v.Catalog)
-                .WithMany(c => c.Values)
-                .HasForeignKey(v => v.CatalogId);
+            //modelBuilder.Entity<Value>()
+            //    .HasRequired(v => v.Field)
+            //    .WithMany(f => f.Values)
+            //    .HasForeignKey(v => v.FieldId);
+
+            //modelBuilder.Entity<Value>()
+            //    .HasRequired(v => v.Catalog)
+            //    .WithMany(c => c.Values)
+            //    .HasForeignKey(v => v.CatalogId);
         }
-        
-        static CatalogContext() { Database.SetInitializer(new DbInitializer()); }
-        public CatalogContext(string connection) : base(connection) { }
     }
 }

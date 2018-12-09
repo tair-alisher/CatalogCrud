@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CatalogCrud.DAL.Entities
 {
+    [Table("Field")]
     public class Field
     {
         public Guid Id { get; set; }

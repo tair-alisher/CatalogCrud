@@ -1,0 +1,36 @@
+﻿@model IEnumerable<CatalogCrud.Web.Models.ViewModels.CatalogVM>
+
+@{
+    ViewBag.Title = "Справочники";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Справочники</h2>
+
+<p>
+    @Html.ActionLink("Добавить справочник", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Поля", "Fields", new { id = item.Id }) |
+            @Html.ActionLink("Значения", "FillCatalog", new { id = item.Id }) |
+            @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Подробнее", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+        </td>
+    </tr>
+}
+
+</table>

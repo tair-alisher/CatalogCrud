@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CatalogCrud.DAL.Entities
 {
+    [Table("Value")]
     public class Value
     {
         public Guid Id { get; set; }

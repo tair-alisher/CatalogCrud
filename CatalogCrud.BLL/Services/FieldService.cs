@@ -22,7 +22,7 @@ namespace CatalogCrud.BLL.Services
 
         public IEnumerable<FieldDTO> GetAll()
         {
-            var fields = _worker.Fields.GetAll().ToList();
+            var fields = _worker.Fields.GetAll().OrderBy(f => f.Name).ToList();
             return Mapper.Map<IEnumerable<FieldDTO>>(fields);
         }
 

@@ -22,7 +22,7 @@ namespace CatalogCrud.BLL.Services
 
         public IEnumerable<CatalogDTO> GetAll()
         {
-            var catalogs = _worker.Catalogs.GetAll().ToList();
+            var catalogs = _worker.Catalogs.GetAll().OrderBy(c => c.Name).ToList();
             return Mapper.Map<IEnumerable<CatalogDTO>>(catalogs);
         }
 
