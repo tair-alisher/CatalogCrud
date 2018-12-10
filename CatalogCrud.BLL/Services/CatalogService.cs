@@ -72,5 +72,24 @@ namespace CatalogCrud.BLL.Services
         {
             _worker.Dispose();
         }
+
+        public IEnumerable<FieldDTO> GetCatalogFields(Guid catalogId)
+        {
+            var fields = _worker.Catalogs.Get(catalogId).Fields.ToList();
+            return Mapper.Map<IEnumerable<FieldDTO>>(fields);
+        }
+
+        public OperationDetails AttachField(Guid catalogId, Guid fieldId)
+        {
+            var catalog = _worker.Catalogs.Get(catalogId);
+            var field = _worker.Fields.Get(fieldId);
+            if (catalog == null || field == null)
+                return new OperationDetails(false, "Идентификатор не задан.", "");
+
+            catalog.Fields.Add(field);
+            _worker.Save();
+
+            return new OperationDetails(true, "Поле закреплено.", "");
+        }
     }
 }

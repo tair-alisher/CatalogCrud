@@ -1,0 +1,27 @@
+﻿@model IEnumerable<CatalogCrud.Web.Models.ViewModels.FieldVM>
+
+@if (Model.Count() <= 0)
+{
+    <p><b>Нет результатов</b></p>
+}
+else
+{
+    <h4>Результаты поиска</h4>
+    <table class="table" id="found-items-list">
+        <thead>
+            <tr>
+                <th>Поле</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var field in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(model => field.Name)</td>
+                    <td><button type="button" class="btn btn-link" onclick="attachField('@field.Id')">Добавить</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,6 @@
+﻿@model CatalogCrud.Web.Models.ViewModels.FieldVM
+
+<tr id="attached-@Model.Id">
+    <td>@Model.Name</td>
+    <td><button type="button" class="btn btn-link text-danger" onclick="detachField('@Model.Id')">Убрать</button></td>
+</tr>

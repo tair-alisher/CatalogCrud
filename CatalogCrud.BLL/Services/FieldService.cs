@@ -72,5 +72,11 @@ namespace CatalogCrud.BLL.Services
         {
             _worker.Dispose();
         }
+
+        public IEnumerable<FieldDTO> FindFields(string value)
+        {
+            var foundFields = _worker.Fields.GetAll().Where(f => f.Name.Contains(value)).ToList();
+            return Mapper.Map<IEnumerable<FieldDTO>>(foundFields);
+        }
     }
 }

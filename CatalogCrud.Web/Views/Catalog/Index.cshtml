@@ -24,7 +24,7 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.ActionLink("Поля", "Fields", new { id = item.Id }) |
+            @Html.ActionLink("Поля", "AttachedFields", new { catalogId = item.Id }) |
             @Html.ActionLink("Значения", "FillCatalog", new { id = item.Id }) |
             @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }) |
             @Html.ActionLink("Подробнее", "Details", new { id = item.Id }) |
