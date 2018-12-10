@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Значения";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Значения</h2>
+@Html.AntiForgeryToken()
+<input type="hidden" name="catalogId" id="catalogId" value="@ViewBag.CatalogId" />
+
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th>Строка</th>
+            @foreach (var field in ViewBag.Fields)
+            {
+                <th>@field.Name</th>
+            }
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="catalog-values">
+        @{ int rowNumber = 1; }
+        @foreach (var row in ViewBag.Rows)
+        {
+            <tr id="row-@rowNumber">
+                <td class="row-number">@rowNumber.</td>
+                @foreach (var value in row)
+                {
+                    <td>@value.Title</td>
+                }
+                <td class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="editRow('@rowNumber')">Редактировать</button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeRow('@rowNumber)">Удалить</button>
+                </td>
+            </tr>
+            { rowNumber++; }
+        }
+    </tbody>
+</table>
+<div id="create-row">
+    <button type="button" id="add-row-button" class="btn btn-link" onclick="addRow()">+ Добавить строку</button>
+</div>
+

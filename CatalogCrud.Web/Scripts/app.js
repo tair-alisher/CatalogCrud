@@ -1,6 +1,6 @@
 ﻿function searchFields() {
-    var field = $('#search-input-value').val();
     var token = $('input[name="__RequestVerificationToken"]').val();
+    var field = $('#search-input-value').val();
     var searchPrependText = $('#searching').text();
 
     $('#searching').text('Идет поиск...');
@@ -18,7 +18,7 @@
         },
         error: function (XmlHttpRequest) {
             $('#searching').text = 'Ошибка';
-            console.log(XmlHttpRequest);
+            console.log(XmlHttpRequest.responseText);
         }
     });
     return false;
@@ -30,8 +30,8 @@ function attachField(fieldId) {
         return false;
     }
 
-    var catalogId = $('#catalogId').val();
     var token = $('input[name="__RequestVerificationToken"]').val();
+    var catalogId = $('#catalogId').val();
 
     $.ajax({
         url: '/Catalog/AttachField',
@@ -47,7 +47,34 @@ function attachField(fieldId) {
         },
         error: function (XmlHttpRequest) {
             alert('Ошибка. Обновите страницу.');
-            console.log(XmlHttpRequest);
+            console.log(XmlHttpRequest.responseText);
+        }
+    });
+    return false;
+}
+
+function detachField(fieldId) {
+    var token = $('input[name="__RequestVerificationToken"]').val();
+    var catalogId = $('#catalogId').val();
+
+    $.ajax({
+        url: '/Catalog/DetachField',
+        type: 'Post',
+        data: {
+            __RequestVerificationToken: token,
+            'catalogId': catalogId,
+            'fieldId': fieldId
+        },
+        success: function (message) {
+            if (message === 'success') {
+                $('#attached-' + fieldId).remove();
+            } else if (message === 'fail') {
+                alert('Ошибка. Обновите страницу и попробуйте еще раз.');
+            }
+        },
+        error: function (XmlHttpRequest) {
+            alert('Ошибка. Обновите страницу и поробуйте еще раз.');
+            console.log(XmlHttpRequest.responseText);
         }
     });
     return false;
@@ -56,4 +83,139 @@ function attachField(fieldId) {
 function clearSearch() {
     $('#found-items').empty();
     $('#search-input-value').val('');
+}
+
+function addRow() {
+    if ($('.row-form').length > 0) {
+        alert('Сохраните открытую форму');
+        return false;
+    }
+
+    var catalogId = $('#catalogId').val();
+    var token = $('input[name="__RequestVerificationToken"]').val();
+
+    var rowNumber;
+    if ($('.row-number').length > 0) {
+        rowNumber = parseInt($('.row-number').last().text()) + 1;
+    }
+    else {
+        rowNumber = 1;
+    }
+
+    $.ajax({
+        url: '/Catalog/AddRow',
+        type: 'Post',
+        data: {
+            __RequestVerificationToken: token,
+            'catalogId': catalogId,
+            'rowNumber': rowNumber
+        },
+        success: function (form) {
+            $('#add-row-button').hide();
+            $('#create-row').append(form);
+        },
+        error: function (XmlHttpRequest) {
+            alert('Ошибка. Обновите страницу и попробуйте снова.');
+            console.log(XmlHttpRequest.responseText);
+        }
+    });
+    return false;
+}
+
+function save() {
+    var token = $('input[name="__RequestVerificationToken"]').val();
+    var catalogId = $('#catalogId').val();
+    var rowNubmer = $('#fieldRowNumber').val();
+    var values = [];
+
+    $('.add-row-form-field').each(function () {
+        values.push({
+            "Title": $(this).find(".field-value").first().val(),
+            "Row": rowNubmer,
+            "FieldId": $(this).find(".field-id").first().val(),
+            "CatalogId": catalogId
+        });
+    });
+
+    $.ajax({
+        url: '/Catalog/AddedRow',
+        type: 'Post',
+        data: {
+            __RequestVerificationToken: token,
+            'values': values
+        },
+        success: function (html) {
+            $('#add-row-form').remove();
+            $('#add-row-button').show();
+            $('#catalog-values').append(html);
+        },
+        error: function (XmlHttpRequest) {
+            alert('Ошибка. Обновите страницу и попробуйте снова.');
+            console.log(XmlHttpRequest.responseText);
+        }
+    });
+    return false;
+}
+
+function editRow(rowNumber) {
+    if ($('.row-form').length > 0) {
+        alert('Сохраните открытую форму');
+        return false;
+    }
+
+    var catalogId = $('#catalogId').val();
+    var token = $('input[name="__RequestVerificationToken"]').val();
+
+    $.ajax({
+        url: '/Catalog/EditRow',
+        type: 'Post',
+        data: {
+            __RequestVerificationToken: token,
+            'catalogId': catalogId,
+            'rowNumber': rowNumber
+        },
+        success: function (form) {
+            $('#row-' + rowNumber).html(form);
+        },
+        error: function (XmlHttpRequest) {
+            alert('Ошибка. Обновите страницу и попробуйте еще раз.');
+            console.log(XmlHttpRequest.responseText);
+        }
+    });
+    return false;
+}
+
+function saveChanges() {
+    var token = $('input[name="__RequestVerificationToken"]').val();
+    var catalogId = $('#catalogId').val();
+    var rowNumber = $('#fieldRowNumber').val();
+    var values = [];
+
+    $('.edit-row-form-field').each(function () {
+        values.push({
+            "Id": $(this).find(".value_id")[0].val(),
+            "Title": $(this).find(".field-value")[0].val(),
+            "Row": rowNumber,
+            "FieldId": $(this).find(".field-id")[0].val(),
+            "CatalogId": catalogId
+        });
+    });
+
+    $.ajax({
+        url: '/Catalog/EditedRow',
+        type: 'Post',
+        data: {
+            __RequestVerificationToken: token,
+            'values': values
+        },
+        success: function (html) {
+            $('#edit-row-form').remove();
+            $('#row-' + rowNumber).html(html);
+        },
+        error: function (XmlHttpRequest) {
+            alert('Ошибка. Обновите страницу и попробуйте снова.');
+            console.log(XmlHttpRequest.responseText);
+        }
+    });
+    return false;
 }

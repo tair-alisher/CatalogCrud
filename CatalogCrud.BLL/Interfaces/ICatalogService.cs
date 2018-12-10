@@ -9,5 +9,7 @@ namespace CatalogCrud.BLL.Interfaces
     {
         IEnumerable<FieldDTO> GetCatalogFields(Guid catalogId);
         OperationDetails AttachField(Guid catalogId, Guid fieldId);
+        OperationDetails DetachField(Guid catalogId, Guid fieldId);
+        IEnumerable<FieldDTO> GetOrderedCatalogFieldList(Guid? catalogId);
     }
 }

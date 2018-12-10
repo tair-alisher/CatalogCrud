@@ -42,6 +42,8 @@ namespace CatalogCrud.BLL.Services
         {
             var field = Mapper.Map<Field>(item);
             field.Id = Guid.NewGuid();
+            field.CreatedAt = DateTime.Now;
+            field.UpdatedAt = DateTime.Now;
             _worker.Fields.Create(field);
             _worker.Save();
         }
@@ -49,6 +51,7 @@ namespace CatalogCrud.BLL.Services
         public void Update(FieldDTO item)
         {
             var field = Mapper.Map<Field>(item);
+            field.UpdatedAt = DateTime.Now;
             _worker.Fields.Update(field);
             _worker.Save();
         }

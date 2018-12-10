@@ -42,6 +42,8 @@ namespace CatalogCrud.BLL.Services
         {
             var catalog = Mapper.Map<Catalog>(item);
             catalog.Id = Guid.NewGuid();
+            catalog.CreatedAt = DateTime.Now;
+            catalog.UpdatedAt = DateTime.Now;
             _worker.Catalogs.Create(catalog);
             _worker.Save();
         }
@@ -49,6 +51,7 @@ namespace CatalogCrud.BLL.Services
         public void Update(CatalogDTO item)
         {
             var catalog = Mapper.Map<Catalog>(item);
+            catalog.UpdatedAt = DateTime.Now;
             _worker.Catalogs.Update(catalog);
             _worker.Save();
         }
@@ -84,12 +87,35 @@ namespace CatalogCrud.BLL.Services
             var catalog = _worker.Catalogs.Get(catalogId);
             var field = _worker.Fields.Get(fieldId);
             if (catalog == null || field == null)
-                return new OperationDetails(false, "Идентификатор не задан.", "");
+                return new OperationDetails(false, "Объекты не найдены.", "");
 
             catalog.Fields.Add(field);
             _worker.Save();
 
             return new OperationDetails(true, "Поле закреплено.", "");
+        }
+
+        public OperationDetails DetachField(Guid catalogId, Guid fieldId)
+        {
+            var catalog = _worker.Catalogs.Get(catalogId);
+            var field = _worker.Fields.Get(fieldId);
+            if (catalog == null || field == null)
+                return new OperationDetails(false, "Объекты не найдены.", "");
+
+            catalog.Fields.Remove(field);
+            _worker.Save();
+
+            return new OperationDetails(true, "Поле откреплено.", "");
+        }
+
+        public IEnumerable<FieldDTO> GetOrderedCatalogFieldList(Guid? catalogId)
+        {
+            if (catalogId == null)
+                throw new ArgumentNullException();
+
+            var fields = _worker.Catalogs.Get(catalogId).Fields.OrderBy(f => f.Name).ToList();
+
+            return Mapper.Map<IEnumerable<FieldDTO>>(fields);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CatalogCrud.BLL.DTO;
+using System;
 using System.Collections.Generic;
 
 namespace CatalogCrud.BLL.Interfaces

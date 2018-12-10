@@ -15,11 +15,13 @@ namespace CatalogCrud.Web.Controllers
     {
         private ICatalogService CatalogService;
         private IFieldService FieldService;
+        private IValueService ValueService;
 
-        public CatalogController(ICatalogService catalogService, IFieldService fieldService)
+        public CatalogController(ICatalogService catalogService, IFieldService fieldService, IValueService valueService)
         {
             CatalogService = catalogService;
             FieldService = fieldService;
+            ValueService = valueService;
         }
 
         public ActionResult Index()
@@ -95,6 +97,98 @@ namespace CatalogCrud.Web.Controllers
                     action = "PartialError",
                     message = result.Message
                 });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public string DetachField(Guid catalogId, Guid fieldId)
+        {
+            var result = CatalogService.DetachField(catalogId, fieldId);
+
+            if (result.Succeeded)
+                return "success";
+            else
+                return "fail";
+        }
+
+        public ActionResult Values(Guid? catalogId)
+        {
+            try
+            {
+                ViewBag.CatalogId = catalogId;
+                ViewBag.Fields = Mapper.Map<IEnumerable<FieldVM>>(CatalogService.GetOrderedCatalogFieldList(catalogId).ToList()).ToList();
+                ViewBag.Rows = ValueService.GetCatalogValuesByRows(catalogId);
+
+                return View();
+            }
+            catch (ArgumentNullException)
+            {
+                return RedirectToRoute(new
+                {
+                    controller = "Message",
+                    action = "Error",
+                    message = Messages.IdIsNull
+                });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddRow(Guid catalogId, int rowNumber)
+        {
+            ViewBag.RowNumber = rowNumber;
+            var fields = CatalogService.GetOrderedCatalogFieldList(catalogId).ToList();
+            var fieldVMList = Mapper.Map<IEnumerable<FieldVM>>(fields).ToList();
+
+            return PartialView(fieldVMList);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddedRow(IEnumerable<ValueVM> values)
+        {
+            ValueDTO valueDTO;
+            foreach (var value in values)
+            {
+                valueDTO = Mapper.Map<ValueDTO>(value);
+                ValueService.Add(valueDTO);
+            }
+
+            int row = values.First().Row;
+            Guid catalogId = values.First().CatalogId;
+            ViewBag.RowNumber = row;
+            ViewBag.Values = ValueService.GetCatalogValuesByRow(catalogId, row);
+
+            return PartialView();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditRow(Guid catalogId, int rowNumber)
+        {
+            try
+            {
+                ViewBag.RowNumber = rowNumber;
+                ViewBag.Row = ValueService.GetCatalogValuesByRow(catalogId, rowNumber);
+
+                return PartialView();
+            }
+            catch (Exception ex)
+            {
+                return RedirectToRoute(new
+                {
+                    controller = "Message",
+                    action = "PartialError",
+                    mesasge = ex.Message
+                });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditedRow(IEnumerable<ValueVM> values)
+        {
+            return PartialView();
         }
     }
 }

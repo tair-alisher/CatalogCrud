@@ -1,0 +1,11 @@
+﻿<tr id="row-@ViewBag.RowNumber">
+    <td class="row-number">@ViewBag.RowNumber</td>
+    @foreach (var value in ViewBag.Values)
+    {
+        <td>@value.Title</td>
+    }
+    <td class="btn-group btn-group-sm">
+        <button type="button" class="btn btn-primary btn-sm" onclick="editRow('@ViewBag.RowNumber')">Редактировать</button>
+        <button type="button" class="btn btn-danger btn-sm" onclick="removeRow('@ViewBag.RowNumber')">Удалить</button>
+    </td>
+</tr>

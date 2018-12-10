@@ -1,1 +1,9 @@
-﻿
+﻿#edit-row-form {
+    width: 100%;
+}
+.catalog-value {
+    padding-right: 5px;
+}
+.submit-btn {
+    margin-top: 5px;
+}
