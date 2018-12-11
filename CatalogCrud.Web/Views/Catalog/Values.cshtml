@@ -7,7 +7,7 @@
 @Html.AntiForgeryToken()
 <input type="hidden" name="catalogId" id="catalogId" value="@ViewBag.CatalogId" />
 
-<table class="table table-responsive table-sm">
+<table class="table table-responsive table-borderless">
     <thead>
         <tr>
             <th>№</th>
@@ -30,7 +30,7 @@
                 }
                 <td class="btn-group btn-group-sm">
                     <button type="button" class="btn btn-primary btn-sm" onclick="editRow('@rowNumber')">Редактировать</button>
-                    <a href="@Url.Action("DeleteRow", "Catalog", new { catalogId = ViewBag.CatalogId, rowNumber = rowNumber })" class="btn btn-danger btn-sm" onclick="confirmDelete()">Удалить</a>
+                    <a href="@Url.Action("DeleteRow", "Catalog", new { catalogId = ViewBag.CatalogId, rowNumber = rowNumber })" class="btn btn-danger btn-sm" onclick="return confirmDelete()">Удалить</a>
                 </td>
             </tr>
             { rowNumber++; }
@@ -38,6 +38,11 @@
     </tbody>
 </table>
 <div id="create-row">
-    <button type="button" id="add-row-button" class="btn btn-link" onclick="addRow()">+ Добавить строку</button>
+    <button type="button" id="add-row-button" class="btn btn-primary btn-sm" onclick="addRow()">+ Добавить строку</button>
+</div>
+<br />
+<div>
+    @Html.ActionLink("Назад", "Index", null, new { @class = "btn btn-light" })
 </div>
 
+@Html.Partial("~/Views/Shared/Loading.cshtml")

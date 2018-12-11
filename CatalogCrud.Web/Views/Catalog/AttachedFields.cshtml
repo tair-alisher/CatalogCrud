@@ -50,7 +50,8 @@
         }
     </tbody>
 </table>
-
-@section Scripts {
-
-}
+<br />
+<div>
+    @Html.ActionLink("Назад", "Index", null, new { @class = "btn btn-light" })
+</div>
+@Html.Partial("~/Views/Shared/Loading.cshtml")

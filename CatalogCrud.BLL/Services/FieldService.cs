@@ -65,10 +65,20 @@ namespace CatalogCrud.BLL.Services
             if (field == null)
                 return new OperationDetails(false, "Поле не найдено.", "");
 
+            if (HasRelations((Guid)id))
+                return new OperationDetails(false, "У объекта имеются связи. Удаление невозможно.", "");
+
             _worker.Fields.Delete((Guid)id);
             _worker.Save();
 
             return new OperationDetails(true, "Поле удалено.", "");
+        }
+
+        private bool HasRelations(Guid id)
+        {
+            var relationsCount = _worker.Fields.Get(id).Catalogs.Count();
+
+            return relationsCount > 0;
         }
 
         public void Dispose()

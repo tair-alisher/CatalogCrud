@@ -8,10 +8,10 @@
 <h2>Добавление поля</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Заполните поля</h4>
         <hr />
@@ -32,6 +32,7 @@
     </div>
 }
 
+<br />
 <div>
-    @Html.ActionLink("Назад", "Index")
+    @Html.ActionLink("Назад", "Index", null, new { @class = "btn btn-light" })
 </div>

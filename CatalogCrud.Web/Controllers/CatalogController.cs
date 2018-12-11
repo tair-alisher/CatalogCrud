@@ -52,6 +52,50 @@ namespace CatalogCrud.Web.Controllers
             return View(model);
         }
 
+        public ActionResult Edit(Guid? id)
+        {
+            try
+            {
+                var catalogDTO = CatalogService.Get(id);
+                var catalogVM = Mapper.Map<CatalogVM>(catalogDTO);
+
+                return View(catalogVM);
+            }
+            catch (ArgumentNullException)
+            {
+                return RedirectToRoute(new { controller = "Message", action = "Error", message = Messages.IdIsNull });
+            }
+            catch (NotFoundException)
+            {
+                return RedirectToRoute(new { controller = "Message", Action = "Error", message = Messages.NotFound });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(CatalogVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var catalogDTO = Mapper.Map<CatalogDTO>(model);
+                CatalogService.Update(catalogDTO);
+
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
+        }
+
+        public ActionResult Delete(Guid? id)
+        {
+            var result = CatalogService.Delete(id);
+
+            if (result.Succeeded)
+                return RedirectToAction("Index");
+            else
+                return RedirectToRoute(new { controller = "Message", action = "Error", message = result.Message });
+        }
+
         public ActionResult AttachedFields(Guid? catalogId)
         {
             try
@@ -63,21 +107,11 @@ namespace CatalogCrud.Web.Controllers
             }
             catch (ArgumentNullException)
             {
-                return RedirectToRoute(new
-                {
-                    controller = "Message",
-                    action = "Error",
-                    message = Messages.IdIsNull
-                });
+                return RedirectToRoute(new { controller = "Message", action = "Error", message = Messages.IdIsNull });
             }
             catch (NotFoundException)
             {
-                return RedirectToRoute(new
-                {
-                    controller = "Message",
-                    action = "Error",
-                    message = Messages.NotFound
-                });
+                return RedirectToRoute(new { controller = "Message", action = "Error", message = Messages.NotFound });
             }
         }
 
@@ -91,12 +125,7 @@ namespace CatalogCrud.Web.Controllers
             if (result.Succeeded)
                 return PartialView(fieldVM);
             else
-                return RedirectToRoute(new
-                {
-                    controller = "Message",
-                    action = "PartialError",
-                    message = result.Message
-                });
+                return RedirectToRoute(new { controller = "Message", action = "PartialError", message = result.Message });
         }
 
         [HttpPost]
@@ -123,12 +152,7 @@ namespace CatalogCrud.Web.Controllers
             }
             catch (ArgumentNullException)
             {
-                return RedirectToRoute(new
-                {
-                    controller = "Message",
-                    action = "Error",
-                    message = Messages.IdIsNull
-                });
+                return RedirectToRoute(new { controller = "Message", action = "Error", message = Messages.IdIsNull });
             }
         }
 
@@ -176,12 +200,7 @@ namespace CatalogCrud.Web.Controllers
             }
             catch (Exception ex)
             {
-                return RedirectToRoute(new
-                {
-                    controller = "Message",
-                    action = "PartialError",
-                    mesasge = ex.Message
-                });
+                return RedirectToRoute(new { controller = "Message", action = "PartialError", mesasge = ex.Message });
             }
         }
 
@@ -211,12 +230,7 @@ namespace CatalogCrud.Web.Controllers
             if (result.Succeeded)
                 return RedirectToAction("Values", new { catalogId });
             else
-                return RedirectToRoute(new
-                {
-                    controller = "Message",
-                    action = "Error",
-                    message = result.Message
-                });
+                return RedirectToRoute(new { controller = "Message", action = "Error", message = result.Message });
         }
     }
 }

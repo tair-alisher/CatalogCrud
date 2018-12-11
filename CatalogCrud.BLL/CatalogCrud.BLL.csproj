@@ -69,6 +69,7 @@
     <Compile Include="DTO\FieldDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="DTO\ValueDTO.cs" />
+    <Compile Include="Exceptions\HasRelationsException.cs" />
     <Compile Include="Exceptions\NotFoundException.cs" />
     <Compile Include="Infrastructure\OperationDetails.cs" />
     <Compile Include="Infrastructure\ServiceModule.cs" />

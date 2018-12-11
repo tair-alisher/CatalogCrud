@@ -8,7 +8,7 @@
 <h2>Справочники</h2>
 
 <p>
-    @Html.ActionLink("Добавить справочник", "Create")
+    @Html.ActionLink("Добавить справочник", "Create", null, new { @class = "btn btn-primary btn-sm" })
 </p>
 <table class="table">
     <tr>
@@ -26,9 +26,8 @@
         <td>
             @Html.ActionLink("Поля", "AttachedFields", new { catalogId = item.Id }) |
             @Html.ActionLink("Значения", "Values", new { catalogId = item.Id }) |
-            @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }) |
-            @Html.ActionLink("Подробнее", "Details", new { id = item.Id }) |
-            @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+            @Html.ActionLink("Переименовать", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Удалить", "Delete", new { id = item.Id }, new { @onclick = "return confirmDelete();" })
         </td>
     </tr>
 }

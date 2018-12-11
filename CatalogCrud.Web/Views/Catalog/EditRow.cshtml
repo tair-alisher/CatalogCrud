@@ -1,6 +1,13 @@
 ﻿<td id="edit-row-form" class="row-form">
     <input type="hidden" name="fieldRowNumber" id="fieldRowNumber" value="@ViewBag.RowNumber" />
 
+    <div class="input-group input-group-sm">
+        <div class="input-group-prepend">
+            <span class="input-group-text">№</span>
+        </div>
+        <input type="text" class="form-control form-control-sm" value="@ViewBag.RowNumber" disabled />
+    </div>
+
     @foreach (var value in ViewBag.Row)
     {
         <div class="input-group input-group-sm edit-row-form-field">

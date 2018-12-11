@@ -65,10 +65,28 @@ namespace CatalogCrud.BLL.Services
             if (catalog == null)
                 return new OperationDetails(false, "Справочник не найден.", "");
 
+            RemoveCatalogFieldRelations((Guid)id);
+            RemoveCatalogValues((Guid)id);
+
             _worker.Catalogs.Delete((Guid)id);
             _worker.Save();
 
             return new OperationDetails(true, "Справочник удален.", "");
+        }
+
+        private void RemoveCatalogFieldRelations(Guid id)
+        {
+            var catalog = _worker.Catalogs.Get(id);
+            catalog.Fields.Clear();
+            _worker.Save();
+        }
+
+        private void RemoveCatalogValues(Guid id)
+        {
+            var values = _worker.Values.GetAll().Where(v => v.CatalogId == id).ToList();
+            foreach (var value in values)
+                _worker.Values.Delete(value.Id);
+            _worker.Save();
         }
 
         public void Dispose()
