@@ -7,10 +7,10 @@
 @Html.AntiForgeryToken()
 <input type="hidden" name="catalogId" id="catalogId" value="@ViewBag.CatalogId" />
 
-<table class="table table-responsive">
+<table class="table table-responsive table-sm">
     <thead>
         <tr>
-            <th>Строка</th>
+            <th>№</th>
             @foreach (var field in ViewBag.Fields)
             {
                 <th>@field.Name</th>
@@ -30,7 +30,7 @@
                 }
                 <td class="btn-group btn-group-sm">
                     <button type="button" class="btn btn-primary btn-sm" onclick="editRow('@rowNumber')">Редактировать</button>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removeRow('@rowNumber)">Удалить</button>
+                    <a href="@Url.Action("DeleteRow", "Catalog", new { catalogId = ViewBag.CatalogId, rowNumber = rowNumber })" class="btn btn-danger btn-sm" onclick="confirmDelete()">Удалить</a>
                 </td>
             </tr>
             { rowNumber++; }

@@ -26,7 +26,7 @@ namespace CatalogCrud.DAL.Repositories
         public void Delete(Guid id)
         {
             T item = DbSet.Find(id);
-            if (item == null)
+            if (item != null)
                 DbSet.Remove(item);
         }
 

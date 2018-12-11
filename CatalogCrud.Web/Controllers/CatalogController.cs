@@ -156,6 +156,7 @@ namespace CatalogCrud.Web.Controllers
 
             int row = values.First().Row;
             Guid catalogId = values.First().CatalogId;
+            ViewBag.CatalogId = catalogId;
             ViewBag.RowNumber = row;
             ViewBag.Values = ValueService.GetCatalogValuesByRow(catalogId, row);
 
@@ -188,7 +189,34 @@ namespace CatalogCrud.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditedRow(IEnumerable<ValueVM> values)
         {
+            ValueDTO valueDTO;
+            foreach (var value in values)
+            {
+                valueDTO = Mapper.Map<ValueDTO>(value);
+                ValueService.Update(valueDTO);
+            }
+
+            int row = values.First().Row;
+            Guid catalogId = values.First().CatalogId;
+            ViewBag.CatalogId = catalogId;
+            ViewBag.RowNumber = row;
+            ViewBag.Values = ValueService.GetCatalogValuesByRow(catalogId, row);
+
             return PartialView();
+        }
+
+        public ActionResult DeleteRow(Guid catalogId, int rowNumber)
+        {
+            var result = ValueService.DeleteRowAndDecrementAllFollowing(catalogId, rowNumber);
+            if (result.Succeeded)
+                return RedirectToAction("Values", new { catalogId });
+            else
+                return RedirectToRoute(new
+                {
+                    controller = "Message",
+                    action = "Error",
+                    message = result.Message
+                });
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -126,6 +125,40 @@ namespace CatalogCrud.BLL.Services
                 }).GroupBy(v => v.Row).Select(r => r.OrderBy(v => v.Field.Name)).FirstOrDefault();
 
             return row;
+        }
+
+        public OperationDetails DeleteRowAndDecrementAllFollowing(Guid catalogId, int rowNumber)
+        {
+            try
+            {
+                DeleteRow(catalogId, rowNumber);
+                DecrementRowsAfterDeleted(rowNumber);
+
+                return new OperationDetails(true, "Строка удалена.", "");
+            }
+            catch (Exception)
+            {
+                return new OperationDetails(false, "Ошибка. Попробуйте еще раз.", "");
+            }
+        }
+
+        private void DeleteRow(Guid catalogId, int rowNumber)
+        {
+            var values = _worker.Values.GetAll().Where(v => v.CatalogId == catalogId && v.Row == rowNumber).ToList();
+            foreach (var value in values)
+                _worker.Values.Delete(value.Id);
+            _worker.Save();
+        }
+
+        private void DecrementRowsAfterDeleted(int deletedRow)
+        {
+            var values = _worker.Values.GetAll().Where(v => v.Row > deletedRow).ToList();
+            foreach(var value in values)
+            {
+                value.Row -= 1;
+                _worker.Values.Update(value);
+            }
+            _worker.Save();
         }
     }
 }

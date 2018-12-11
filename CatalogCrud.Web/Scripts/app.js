@@ -193,10 +193,10 @@ function saveChanges() {
 
     $('.edit-row-form-field').each(function () {
         values.push({
-            "Id": $(this).find(".value_id")[0].val(),
-            "Title": $(this).find(".field-value")[0].val(),
+            "Id": $(this).find(".value-id").first().val(),
+            "Title": $(this).find(".field-value").first().val(),
             "Row": rowNumber,
-            "FieldId": $(this).find(".field-id")[0].val(),
+            "FieldId": $(this).find(".field-id").first().val(),
             "CatalogId": catalogId
         });
     });
@@ -218,4 +218,33 @@ function saveChanges() {
         }
     });
     return false;
+}
+
+function removeRow(rowNumber) {
+    var confirmation = confirm('Вы уверены, что хотите удалить строку?');
+    if (confirmation) {
+        var catalogId = $('#catalogId').val();
+
+        $.ajax({
+            url: '/Catalog/DeleteRow',
+            type: 'Post',
+            data: {
+                __RequestVerificationToken: token,
+                'catalogId': catalogId,
+                'rowNumber': rowNumber
+            },
+            success: function () {
+                $('#row-' + rowNumber).remove();
+            },
+            error: function (XmlHttpRequest) {
+                alert('Ошибка. Обновите страницу и попробуйте еще раз.');
+                console.log(XmlHttpRequest.responseText);
+            }
+        });
+        return false;
+    }
+}
+
+function confirmDelete() {
+    return confirm('Вы уверены, что хотите удалить строку?');
 }

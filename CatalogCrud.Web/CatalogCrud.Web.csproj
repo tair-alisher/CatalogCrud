@@ -302,6 +302,7 @@
     <Content Include="Views\Catalog\EditRow.cshtml" />
     <Content Include="Views\Catalog\AddRow.cshtml" />
     <Content Include="Views\Catalog\AddedRow.cshtml" />
+    <Content Include="Views\Catalog\EditedRow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
