@@ -1,84 +1,45 @@
 ﻿@model CatalogCrud.Web.Models.Account.RegisterModel
 @{
-    Layout = null;
+    ViewBag.Title = "Регистрация";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    <title>Регистрация - Справочники</title>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #007bff;">
-        <div class="container">
-            <a href="#" class="navbar-brand">Справочники</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        @Html.ActionLink("Вход", "Login", "Account", null, new { @class = "nav-link" })
-                    </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("Регистрация", "Register", "Account", null, new { @class = "nav-link" })
-                    </li>
-                </ul>
-            </div>
+<h2>Регистрация</h2>
 
-        </div>
-    </nav>
-    <div class="container body-content">
-        <h2>Регистрация</h2>
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-            <div class="form-horizontal">
-                <h4>Заполните поля.</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(model => model.UserName)
-                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @requierd = "required", @autofocus = "autofocus" } })
-                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Email)
-                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @requierd = "required" } })
-                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Password)
-                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @requierd = "required" } })
-                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ConfirmPassword)
-                    @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @requierd = "required" } })
-                    @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
-                </div>
-
-                <div class="form-group">
-                    <input type="submit" class="btn btn-primary" value="Зарегистрироваться">
-                </div>
-            </div>
-        }
+    <div class="form-horizontal">
+        <h4>Заполните поля.</h4>
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year – Справочники</p>
-        </footer>
-    </div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserName)
+            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @requierd = "required", @autofocus = "autofocus" } })
+            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+        </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-</body>
-</html>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email)
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @requierd = "required" } })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password)
+            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @requierd = "required" } })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ConfirmPassword)
+            @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @requierd = "required" } })
+            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Зарегистрироваться">
+        </div>
+    </div>
+}

@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace CatalogCrud.Web.Controllers
 {
+    [Authorize(Roles = "admin, catalog_admin, app_admin")]
     public class FieldController : Controller
     {
         private IFieldService FieldService;
@@ -20,6 +21,7 @@ namespace CatalogCrud.Web.Controllers
             FieldService = fieldService;
         }
 
+        [AllowAnonymous]
         public ActionResult Index()
         {
             var fields = FieldService.GetAll().ToList();

@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace CatalogCrud.Web.Controllers
 {
+    [Authorize(Roles = "admin, catalog_admin, app_admin")]
     public class CatalogController : Controller
     {
         private ICatalogService CatalogService;
@@ -24,6 +25,7 @@ namespace CatalogCrud.Web.Controllers
             ValueService = valueService;
         }
 
+        [AllowAnonymous]
         public ActionResult Index()
         {
             var catalogs = CatalogService.GetAll().ToList();

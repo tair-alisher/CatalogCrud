@@ -1,4 +1,5 @@
-﻿using CatalogCrud.BLL.DTO;
+﻿using AutoMapper;
+using CatalogCrud.BLL.DTO;
 using CatalogCrud.BLL.Infrastructure;
 using CatalogCrud.BLL.Interfaces;
 using CatalogCrud.DAL.Entities;
@@ -74,7 +75,11 @@ namespace CatalogCrud.BLL.Services
                 modelDTO.NewPassword);
 
             if (result.Errors.Count() > 0)
+            {
+                if (result.Errors.Any(e => e.Contains("Password")))
+                    return new OperationDetails(false, "Ненадежный пароль", "NewPassword");
                 return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
+            }
 
             await _worker.SaveAsync();
             return new OperationDetails(true, "Пароль успешно изменен.", "");

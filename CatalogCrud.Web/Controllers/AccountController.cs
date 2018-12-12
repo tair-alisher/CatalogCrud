@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace CatalogCrud.Web.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private IUserService UserService
@@ -71,7 +72,7 @@ namespace CatalogCrud.Web.Controllers
                     UserName = model.UserName,
                     Email = model.Email,
                     Password = model.Password,
-                    Role = "app_user"
+                    Role = "app_admin"
                 };
                 OperationDetails result = await UserService.Create(userDTO);
                 if (result.Succeeded)
@@ -89,12 +90,12 @@ namespace CatalogCrud.Web.Controllers
             return RedirectToAction("Login");
         }
 
-        public ActionResult ChangeEmail()
+        public async Task<ActionResult> ChangeEmail()
         {
-            var email = UserService.GetUserEmail(User.Identity.GetUserId());
+            var email = await UserService.GetUserEmail(User.Identity.GetUserId());
             var model = new ChangeEmailModel
             {
-                Email = email.Result
+                Email = email
             };
 
             return View(model);
@@ -113,7 +114,7 @@ namespace CatalogCrud.Web.Controllers
                 };
                 var result = await UserService.ChangeEmail(modelDTO);
                 if (result.Succeeded)
-                    return RedirectToAction("Home", "Catalog");
+                    return RedirectToAction("Index", "Catalog");
                 else
                     ModelState.AddModelError(result.Property, result.Message);
             }
@@ -140,7 +141,7 @@ namespace CatalogCrud.Web.Controllers
                 };
                 var result = await UserService.ChangePassword(modelDTO);
                 if (result.Succeeded)
-                    return RedirectToAction("Home", "Catalog");
+                    return RedirectToAction("Index", "Catalog");
                 else
                     ModelState.AddModelError(result.Property, result.Message);
             }
