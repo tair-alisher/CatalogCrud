@@ -10,6 +10,8 @@ namespace CatalogCrud.BLL.Interfaces
     {
         Task<OperationDetails> Create(UserDTO userDTO);
         Task<ClaimsIdentity> Authenticate(UserDTO userDTO);
+        Task<OperationDetails> ChangeEmail(UserDTO modelDTO);
         Task<OperationDetails> ChangePassword(ChangePasswordDTO modelDTO);
+        Task<string> GetUserEmail(string id);
     }
 }

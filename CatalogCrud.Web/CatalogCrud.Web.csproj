@@ -208,6 +208,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="MappingProfiles\WebMappingProfile.cs" />
+    <Compile Include="Models\Account\ChangeEmailModel.cs" />
+    <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\ViewModels\CatalogVM.cs" />
@@ -311,6 +313,8 @@
     <Content Include="Views\Field\Edit.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ChangeEmail.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

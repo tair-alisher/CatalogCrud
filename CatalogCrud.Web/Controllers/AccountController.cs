@@ -2,6 +2,7 @@
 using CatalogCrud.BLL.Infrastructure;
 using CatalogCrud.BLL.Interfaces;
 using CatalogCrud.Web.Models.Account;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Threading.Tasks;
@@ -75,6 +76,71 @@ namespace CatalogCrud.Web.Controllers
                 OperationDetails result = await UserService.Create(userDTO);
                 if (result.Succeeded)
                     return RedirectToAction("Login");
+                else
+                    ModelState.AddModelError(result.Property, result.Message);
+            }
+
+            return View(model);
+        }
+
+        public ActionResult Logout()
+        {
+            AuthenticationManager.SignOut();
+            return RedirectToAction("Login");
+        }
+
+        public ActionResult ChangeEmail()
+        {
+            var email = UserService.GetUserEmail(User.Identity.GetUserId());
+            var model = new ChangeEmailModel
+            {
+                Email = email.Result
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeEmail(ChangeEmailModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var modelDTO = new UserDTO
+                {
+                    Id = User.Identity.GetUserId(),
+                    Email = model.Email
+                };
+                var result = await UserService.ChangeEmail(modelDTO);
+                if (result.Succeeded)
+                    return RedirectToAction("Home", "Catalog");
+                else
+                    ModelState.AddModelError(result.Property, result.Message);
+            }
+
+            return View(model);
+        }
+
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePassword(ChangePasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var modelDTO = new ChangePasswordDTO
+                {
+                    UserId = User.Identity.GetUserId(),
+                    OldPassword = model.OldPassword,
+                    NewPassword = model.NewPassword
+                };
+                var result = await UserService.ChangePassword(modelDTO);
+                if (result.Succeeded)
+                    return RedirectToAction("Home", "Catalog");
                 else
                     ModelState.AddModelError(result.Property, result.Message);
             }

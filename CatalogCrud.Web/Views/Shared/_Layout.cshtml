@@ -22,6 +22,32 @@
                         @Html.ActionLink("Поля", "Index", "Field", null, new { @class = "nav-link" })
                     </li>
                 </ul>
+
+                <ul class="navbar-nav ml-auto">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Вход", "Login", "Account", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Регистрация", "Register", "Account", null, new { @class = "nav-link" })
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="account" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @User.Identity.Name
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="account">
+                                @Html.ActionLink("Сменить Email", "ChangeEmail", "Account", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Сменить пароль", "ChangePassword", "Account", null, new { @class = "dropdown-item" })
+                                <div class="dropdown-divider"></div>
+                                @Html.ActionLink("Выйти", "Logout", "Account", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                    }
+                </ul>
             </div>
         </div>
     </nav>

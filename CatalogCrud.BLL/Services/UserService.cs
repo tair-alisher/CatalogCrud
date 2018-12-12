@@ -51,6 +51,16 @@ namespace CatalogCrud.BLL.Services
             return claim;
         }
 
+        public async Task<OperationDetails> ChangeEmail(UserDTO modelDTO)
+        {
+            var user = await _worker.UserManager.FindByIdAsync(modelDTO.Id);
+            user.Email = modelDTO.Email;
+            await _worker.UserManager.UpdateAsync(user);
+            await _worker.SaveAsync();
+
+            return new OperationDetails(true, "Почта успешно изменена.", "");
+        }
+
         public async Task<OperationDetails> ChangePassword(ChangePasswordDTO modelDTO)
         {
             ApplicationUser user = await _worker.UserManager.FindByIdAsync(modelDTO.UserId);
@@ -73,6 +83,12 @@ namespace CatalogCrud.BLL.Services
         public void Dispose()
         {
             _worker.Dispose();
+        }
+
+        public async Task<string> GetUserEmail(string id)
+        {
+            var user = await _worker.UserManager.FindByIdAsync(id);
+            return user.Email;
         }
     }
 }
