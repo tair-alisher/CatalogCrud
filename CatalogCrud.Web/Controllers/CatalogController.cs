@@ -4,6 +4,7 @@ using CatalogCrud.BLL.Exceptions;
 using CatalogCrud.BLL.Interfaces;
 using CatalogCrud.Web.Models.ViewModels;
 using CatalogCrud.Web.Util;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,12 +27,13 @@ namespace CatalogCrud.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Index()
+        public ActionResult Index(int ? page)
         {
+            var ItemsPerPage = 10;
             var catalogs = CatalogService.GetAll().ToList();
             var catalogVMList = Mapper.Map<IEnumerable<CatalogVM>>(catalogs);
 
-            return View(catalogVMList);
+            return View(catalogVMList.ToPagedList(page ?? 1, ItemsPerPage));
         }
 
         public ActionResult Create()

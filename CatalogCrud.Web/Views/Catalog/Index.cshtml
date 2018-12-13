@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CatalogCrud.Web.Models.ViewModels.CatalogVM>
+﻿@model PagedList.IPagedList<CatalogCrud.Web.Models.ViewModels.CatalogVM>
+@using PagedList.Mvc
 
 @{
     ViewBag.Title = "Справочники";
@@ -13,7 +14,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.First().Name)
         </th>
         <th></th>
     </tr>
@@ -33,3 +34,10 @@
 }
 
 </table>
+
+@if (!(Model.PageCount <= 0))
+    {
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+
+        <p class="pagination-info">Страница @Model.PageNumber из @Model.PageCount</p>
+    }

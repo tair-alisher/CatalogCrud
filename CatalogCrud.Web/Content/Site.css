@@ -11,3 +11,45 @@
     pointer-events: none;
     cursor: default;
 }
+
+/*ul.pagination {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+ul.pagination li {
+    float: left;
+    border: 1px solid #ccc;
+}
+ul.paingation li:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+ul.paingation li a[rel="pre"] {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+ul.pagination li:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+ul.pagination li a {
+    display: block;
+    color: Black;
+    text-align: center;
+    padding: 5px 16px;
+    text-decoration: none;
+    transition: .1s;
+}
+
+ul.pagination li a:hover:not(.active) {
+    background-color: #007bff;
+}
+
+ul.pagination .active {
+    background-color: #007bff;
+    color: #fff;
+}*/
