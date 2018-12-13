@@ -1,0 +1,57 @@
+﻿@model CatalogCrud.Web.Models.ViewModels.CatalogVM
+
+@{
+    ViewBag.Title = "Поля справочника";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Поля справочника</h2>
+<input type="hidden" id="catalogId" name="catalogId" value="@Model.Id" />
+@Html.AntiForgeryToken()
+
+<div class="form-group" id="fields-search">
+    <div calss="col-md-12" id="search-input">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="searching">Поиск</span>
+            </div>
+            <input type="text" class="form-control" id="search-input-value" placeholder="Поиск поля" aria-describedby="search-cancel-buttons" />
+            <div class="input-group-append" id="search-cancel-buttons">
+                <button class="btn btn-outline-primary" type="button" onclick="searchFields()">Искать</button>
+                <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">Сбросить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="found-items"></div>
+
+<table class="table table-hover table-striped" id="fields">
+    <thead>
+        <tr>
+            <th>Поле</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="attached-fields">
+        @if (Model.Fields.Count() > 0)
+        {
+            foreach (var field in Model.Fields)
+            {
+                <tr id="attached-@field.Id">
+                    <td>@field.Name</td>
+                    <td><button type="button" class="btn btn-link text-danger" onclick="detachField('@field.Id')">Убрать</button></td>
+                </tr>
+            }
+        }
+        else
+        {
+            <p id="no-fields-message">В этом справочнике нет полей.</p>
+        }
+    </tbody>
+</table>
+<br />
+<div>
+    @Html.ActionLink("Назад", "Index", null, new { @class = "btn btn-light" })
+</div>
+@Html.Partial("~/Views/Shared/Loading.cshtml")

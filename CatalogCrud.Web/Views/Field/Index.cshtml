@@ -1,0 +1,41 @@
+﻿@model PagedList.IPagedList<CatalogCrud.Web.Models.ViewModels.FieldVM>
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Поля";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Поля</h2>
+
+<p>
+    @Html.ActionLink("Добавить поле", "Create", null, new { @class = "btn btn-primary btn-sm" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Переименовать", "Edit", new { id=item.Id }, new { @class = "disabled-link text-secondary" }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.Id }, new { @onclick = "return confirmDelete();" })
+        </td>
+    </tr>
+}
+
+</table>
+
+@if (!(Model.PageCount <= 0))
+    {
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+
+        <p class="pagination-info">Страница @Model.PageNumber из @Model.PageCount</p>
+    }
