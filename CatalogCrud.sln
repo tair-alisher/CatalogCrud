@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogCrud.BLL", "CatalogC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogCrud.SoapService", "CatalogCrud.SoapService\CatalogCrud.SoapService.csproj", "{36503E13-F621-4A64-83B1-86E0A66E9585}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogCrud.Client", "CatalogCrud.Client\CatalogCrud.Client.csproj", "{8A8A239A-44A2-4372-8265-5041705B8413}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{36503E13-F621-4A64-83B1-86E0A66E9585}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36503E13-F621-4A64-83B1-86E0A66E9585}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36503E13-F621-4A64-83B1-86E0A66E9585}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A8A239A-44A2-4372-8265-5041705B8413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A8A239A-44A2-4372-8265-5041705B8413}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A8A239A-44A2-4372-8265-5041705B8413}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A8A239A-44A2-4372-8265-5041705B8413}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

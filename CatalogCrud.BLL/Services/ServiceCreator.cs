@@ -14,5 +14,10 @@ namespace CatalogCrud.BLL.Services
         {
             return new CatalogService(new UnitOfWork(connection));
         }
+
+        public IValueService CreateValueService(string connection)
+        {
+            return new ValueService(new UnitOfWork(connection));
+        }
     }
 }

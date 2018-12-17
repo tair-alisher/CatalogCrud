@@ -1,4 +1,4 @@
-﻿using CatalogCrud.SoapService.Services;
+﻿using CatalogCrud.SoapService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace CatalogCrud.Client
     {
         static void Main(string[] args)
         {
-            var client = new CatalogService();
+            var client = new Service();
             var catalogs = client.GetAll();
 
             foreach (var catalog in catalogs)
