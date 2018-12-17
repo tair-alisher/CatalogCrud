@@ -1,9 +1,13 @@
-﻿@{
+﻿@model PagedList.IPagedList<CatalogCrud.Web.Models.ViewModels.RowVM>
+@using PagedList.Mvc
+
+@{
     ViewBag.Title = "Значения";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Значения</h2>
+<p class="text-muted">Добавить новую строку можно только на последней странице.</p>
 @Html.AntiForgeryToken()
 <input type="hidden" name="catalogId" id="catalogId" value="@ViewBag.CatalogId" />
 
@@ -19,27 +23,38 @@
         </tr>
     </thead>
     <tbody id="catalog-values">
-        @{ int rowNumber = 1; }
-        @foreach (var row in ViewBag.Rows)
+        @foreach (var row in Model)
         {
-            <tr id="row-@rowNumber">
-                <td class="row-number">@rowNumber.</td>
-                @foreach (var value in row)
+            <tr id="row-@row.Number">
+                <td class="row-number">@row.Number.</td>
+                @foreach (var value in row.Values)
                 {
                     <td>@value.Title</td>
                 }
                 <td class="btn-group btn-group-sm">
-                    <button type="button" class="btn btn-primary btn-sm" onclick="editRow('@rowNumber')">Редактировать</button>
-                    <a href="@Url.Action("DeleteRow", "Catalog", new { catalogId = ViewBag.CatalogId, rowNumber = rowNumber })" class="btn btn-danger btn-sm" onclick="return confirmDelete()">Удалить</a>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="editRow('@row.Number')">Редактировать</button>
+                    <a href="@Url.Action("DeleteRow", "Catalog", new { catalogId = ViewBag.CatalogId, rowNumber = row.Number })" class="btn btn-danger btn-sm" onclick="return confirmDelete()">Удалить</a>
                 </td>
             </tr>
-            { rowNumber++; }
         }
     </tbody>
 </table>
-<div id="create-row">
-    <button type="button" id="add-row-button" class="btn btn-primary btn-sm" onclick="addRow()">+ Добавить строку</button>
-</div>
+
+
+@if (Model.PageNumber >= Model.PageCount)
+{
+    <div id="create-row">
+        <button type="button" id="add-row-button" class="btn btn-primary btn-sm" onclick="addRow()">+ Добавить строку</button>
+    </div>
+}
+
+@if (!(Model.PageCount <= 0))
+{
+    @Html.PagedListPager(Model, page => Url.Action("Values", new { catalogId = ViewBag.CatalogId, page }))
+
+    <p class="pagination-info">Страница @Model.PageNumber из @Model.PageCount</p>
+}
+
 <br />
 <div>
     @Html.ActionLink("Назад", "Index", null, new { @class = "btn btn-light" })

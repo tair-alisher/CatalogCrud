@@ -144,20 +144,72 @@ namespace CatalogCrud.Web.Controllers
                 return "fail";
         }
 
-        public ActionResult Values(Guid? catalogId)
+        public ActionResult Values(Guid? catalogId, int? page)
         {
             try
             {
+                int ItemsPerPage = 2;
                 ViewBag.CatalogId = catalogId;
                 ViewBag.Fields = Mapper.Map<IEnumerable<FieldVM>>(CatalogService.GetOrderedCatalogFieldList(catalogId).ToList()).ToList();
-                ViewBag.Rows = ValueService.GetCatalogValuesByRows(catalogId);
 
-                return View();
+                var valuesByRows = ValueService.GetCatalogValuesByRows(catalogId);
+                var rows = ConvertDTOValuesByRowsToVMValuesByRows(valuesByRows);
+
+                return View(rows.ToPagedList(page ?? 1, ItemsPerPage));
             }
             catch (ArgumentNullException)
             {
                 return RedirectToRoute(new { controller = "Message", action = "Error", message = Messages.IdIsNull });
             }
+        }
+
+        public ActionResult UploadExcel(Guid catalogId)
+        {
+            ViewBag.CatalogId = catalogId;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Upload(Guid catalogId)
+        {
+            var file = Request.Files["excelFile"];
+            if (Request.Files["excelFile"].ContentLength > 0)
+            {
+                string[] validFileTypes = { ".xls", ".xlsx" };
+                string fileExt = System.IO.Path.GetExtension(Request.Files["excelFile"].FileName).ToLower();
+
+                if (!validFileTypes.Contains(fileExt))
+                {
+
+                }
+                else
+                {
+                    ModelState.AddModelError("excelFile", "Файл должен быть формата .xls или .xlsx.");
+                }
+            }
+            else
+                ModelState.AddModelError("excelFile", "Выберите файл.");
+
+            return View();
+        }
+
+        private IEnumerable<RowVM> ConvertDTOValuesByRowsToVMValuesByRows(IEnumerable<IOrderedEnumerable<ValueDTO>> valuesByRows)
+        {
+            List<RowVM> rows = new List<RowVM>();
+
+            foreach (var valuesByRow in valuesByRows)
+            {
+                var row = new RowVM
+                {
+                    Number = valuesByRow.First().Row
+                };
+                foreach (var valueDTO in valuesByRow)
+                    row.Values.Add(Mapper.Map<ValueVM>(valueDTO));
+                rows.Add(row);
+            }
+
+            return rows;
         }
 
         [HttpPost]

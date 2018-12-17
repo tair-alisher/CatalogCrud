@@ -127,6 +127,52 @@ namespace CatalogCrud.BLL.Services
             return row;
         }
 
+        public IEnumerable<IOrderedEnumerable<Service_ValueDTO>> GetCatalogValuesByRows(Guid catalogId)
+        {
+            var rows = (
+                from value in _worker.Values.GetAll()
+                join field in _worker.Fields.GetAll()
+                on value.FieldId equals field.Id
+                join catalog in _worker.Catalogs.GetAll()
+                on value.CatalogId equals catalog.Id
+                where value.CatalogId == catalogId
+                select new Service_ValueDTO
+                {
+                    Id = value.Id,
+                    Title = value.Title,
+                    Row = value.Row,
+                    FieldId = value.FieldId,
+                    CatalogId = (Guid)catalogId,
+                    Field = field.Name,
+                    Catalog = catalog.Name
+                }).GroupBy(v => v.Row).Select(r => r.OrderBy(v => v.Field)).ToList();
+
+            return rows;
+        }
+
+        public IEnumerable<IOrderedEnumerable<Service_ValueDTO>> GetPagedByRowsCatalogValues(Guid catalogId, int page, int itemsPerPage)
+        {
+            var rows = (
+                from value in _worker.Values.GetAll()
+                join field in _worker.Fields.GetAll()
+                on value.FieldId equals field.Id
+                join catalog in _worker.Catalogs.GetAll()
+                on value.CatalogId equals catalog.Id
+                where value.CatalogId == catalogId
+                select new Service_ValueDTO
+                {
+                    Id = value.Id,
+                    Title = value.Title,
+                    Row = value.Row,
+                    FieldId = value.FieldId,
+                    CatalogId = (Guid)catalogId,
+                    Field = field.Name,
+                    Catalog = catalog.Name
+                }).GroupBy(v => v.Row).Select(r => r.OrderBy(v => v.Field)).OrderBy(r => r.FirstOrDefault().Row).Skip(itemsPerPage * (page - 1)).Take(itemsPerPage).ToList();
+
+            return rows;
+        }
+
         public OperationDetails DeleteRowAndDecrementAllFollowing(Guid catalogId, int rowNumber)
         {
             try
