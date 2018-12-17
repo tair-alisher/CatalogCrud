@@ -77,12 +77,14 @@
     <Compile Include="Interfaces\IFieldService.cs" />
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Interfaces\IServiceCreator.cs" />
+    <Compile Include="Interfaces\ISoapCatalogService.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Interfaces\IValueService.cs" />
     <Compile Include="MappingProfiles\BLLMappingProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CatalogService.cs" />
     <Compile Include="Services\FieldService.cs" />
+    <Compile Include="Services\ISoapCatalogService.cs" />
     <Compile Include="Services\ServiceCreator.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Services\ValueService.cs" />

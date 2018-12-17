@@ -9,5 +9,10 @@ namespace CatalogCrud.BLL.Services
         {
             return new UserService(new UnitOfWork(connection));
         }
+
+        public ICatalogService CreateCatalogService(string connection)
+        {
+            return new CatalogService(new UnitOfWork(connection));
+        }
     }
 }
