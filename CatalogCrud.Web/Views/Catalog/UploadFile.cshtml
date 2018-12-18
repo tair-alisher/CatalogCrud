@@ -1,10 +1,10 @@
 ﻿
 @{
-    ViewBag.Title = "Загрузка Excel файла";
+    ViewBag.Title = "Загрузка файла";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Загрузка Excel файла</h2>
+<h2>Загрузка csv файла</h2>
 <hr />
 @using (Html.BeginForm("Upload", "Catalog", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -12,7 +12,7 @@
     <input type="hidden" name="catalogId" value="@ViewBag.CatalogId" />
 
     <div class="form-group">
-        <input type="file" name="excelFile" />
+        <input type="file" name="file" />
     </div>
 
     <div class="form-group">

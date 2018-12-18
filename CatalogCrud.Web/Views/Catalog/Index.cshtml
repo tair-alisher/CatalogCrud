@@ -27,7 +27,7 @@
         <td>
             @Html.ActionLink("Поля", "AttachedFields", new { catalogId = item.Id }) |
             @Html.ActionLink("Значения", "Values", new { catalogId = item.Id }) |
-            @Html.ActionLink("Загрузить Excel", "UploadExcel", new { catalogId = item.Id }) |
+            @Html.ActionLink("Загрузить csv файл", "UploadFile", new { catalogId = item.Id }) |
             @Html.ActionLink("Переименовать", "Edit", new { id = item.Id }) |
             @Html.ActionLink("Удалить", "Delete", new { id = item.Id }, new { @onclick = "return confirmDelete();" })
         </td>

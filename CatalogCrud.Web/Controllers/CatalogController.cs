@@ -7,12 +7,13 @@ using CatalogCrud.Web.Util;
 using PagedList;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
 namespace CatalogCrud.Web.Controllers
 {
-    [Authorize(Roles = "admin, catalog_admin, app_admin")]
+    //[Authorize(Roles = "admin, catalog_admin, app_admin")]
     public class CatalogController : Controller
     {
         private ICatalogService CatalogService;
@@ -163,7 +164,7 @@ namespace CatalogCrud.Web.Controllers
             }
         }
 
-        public ActionResult UploadExcel(Guid catalogId)
+        public ActionResult UploadFile(Guid catalogId)
         {
             ViewBag.CatalogId = catalogId;
             return View();
@@ -173,25 +174,52 @@ namespace CatalogCrud.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Upload(Guid catalogId)
         {
-            var file = Request.Files["excelFile"];
-            if (Request.Files["excelFile"].ContentLength > 0)
+            var file = Request.Files["file"];
+            if (file.ContentLength > 0)
             {
-                string[] validFileTypes = { ".xls", ".xlsx" };
-                string fileExt = System.IO.Path.GetExtension(Request.Files["excelFile"].FileName).ToLower();
+                var catalogFields = CatalogService.GetOrderedCatalogFieldList(catalogId);
+                string validFileType = ".csv";
+                string fileExt = Path.GetExtension(file.FileName).ToLower();
 
-                if (!validFileTypes.Contains(fileExt))
+                if (fileExt == validFileType)
                 {
+                    StreamReader csvreader = new StreamReader(file.InputStream);
+                    //while (!csvreader.EndOfStream)
+                    //{
+                    //    var line = csvreader.ReadLine();
+                    //    var value = line.Split(';');
+                    //}
+                    var csvlines = csvreader.ReadToEnd().Split('\n');
+                    List<string> csvFields = csvlines[0].Split(';').Select(f => f.ToLower()).ToList();
+                    for (int line = 1; line < csvlines.Length; line++)
+                    {
+                        var values = csvlines[line].Split(';');
+                        for (int value = 0; value < values.Length; value++)
+                        {
+                            var valueField = catalogFields.Where(cf => csvFields.Contains(cf.Name.ToLower())).FirstOrDefault();
+                            if (valueField != null)
+                            {
+                                var valueDTO = new ValueDTO
+                                {
+                                    Title = values[value], // need to encode in utf8
+                                    Row = line,
+                                    FieldId = valueField.Id,
+                                    CatalogId = catalogId
+                                };
+                                ValueService.Add(valueDTO);
+                            }
+                        }
+                    }
 
+                    return RedirectToAction("Index");
                 }
                 else
-                {
-                    ModelState.AddModelError("excelFile", "Файл должен быть формата .xls или .xlsx.");
-                }
+                    ModelState.AddModelError("file", "Файл должен быть формата <b>.csv</b>.");
             }
             else
                 ModelState.AddModelError("excelFile", "Выберите файл.");
 
-            return View();
+            return View("UploadFile");
         }
 
         private IEnumerable<RowVM> ConvertDTOValuesByRowsToVMValuesByRows(IEnumerable<IOrderedEnumerable<ValueDTO>> valuesByRows)
