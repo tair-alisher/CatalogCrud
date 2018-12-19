@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace CatalogCrud.Web.Controllers
 {
-    [Authorize(Roles = "admin, catalog_admin, app_admin")]
+    //[Authorize(Roles = "admin, catalog_admin, app_admin")]
     public class FieldController : Controller
     {
         private IFieldService FieldService;

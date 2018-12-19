@@ -127,12 +127,58 @@ namespace CatalogCrud.BLL.Services
             return row;
         }
 
+        public IEnumerable<IOrderedEnumerable<Service_ValueDTO>> GetCatalogValuesByRows(Guid catalogId)
+        {
+            var rows = (
+                from value in _worker.Values.GetAll()
+                join field in _worker.Fields.GetAll()
+                on value.FieldId equals field.Id
+                join catalog in _worker.Catalogs.GetAll()
+                on value.CatalogId equals catalog.Id
+                where value.CatalogId == catalogId
+                select new Service_ValueDTO
+                {
+                    Id = value.Id,
+                    Title = value.Title,
+                    Row = value.Row,
+                    FieldId = value.FieldId,
+                    CatalogId = (Guid)catalogId,
+                    Field = field.Name,
+                    Catalog = catalog.Name
+                }).GroupBy(v => v.Row).Select(r => r.OrderBy(v => v.Field)).ToList();
+
+            return rows;
+        }
+
+        public IEnumerable<IOrderedEnumerable<Service_ValueDTO>> GetPagedByRowsCatalogValues(Guid catalogId, int page, int itemsPerPage)
+        {
+            var rows = (
+                from value in _worker.Values.GetAll()
+                join field in _worker.Fields.GetAll()
+                on value.FieldId equals field.Id
+                join catalog in _worker.Catalogs.GetAll()
+                on value.CatalogId equals catalog.Id
+                where value.CatalogId == catalogId
+                select new Service_ValueDTO
+                {
+                    Id = value.Id,
+                    Title = value.Title,
+                    Row = value.Row,
+                    FieldId = value.FieldId,
+                    CatalogId = (Guid)catalogId,
+                    Field = field.Name,
+                    Catalog = catalog.Name
+                }).GroupBy(v => v.Row).Select(r => r.OrderBy(v => v.Field)).OrderBy(r => r.FirstOrDefault().Row).Skip(itemsPerPage * (page - 1)).Take(itemsPerPage).ToList();
+
+            return rows;
+        }
+
         public OperationDetails DeleteRowAndDecrementAllFollowing(Guid catalogId, int rowNumber)
         {
             try
             {
                 DeleteRow(catalogId, rowNumber);
-                DecrementRowsAfterDeleted(rowNumber);
+                DecrementRowsAfterDeleted(catalogId, rowNumber);
 
                 return new OperationDetails(true, "Строка удалена.", "");
             }
@@ -150,9 +196,9 @@ namespace CatalogCrud.BLL.Services
             _worker.Save();
         }
 
-        private void DecrementRowsAfterDeleted(int deletedRow)
+        private void DecrementRowsAfterDeleted(Guid catalogId, int deletedRow)
         {
-            var values = _worker.Values.GetAll().Where(v => v.Row > deletedRow).ToList();
+            var values = _worker.Values.GetAll().Where(v => v.CatalogId == catalogId && v.Row > deletedRow).ToList();
             foreach(var value in values)
             {
                 value.Row -= 1;

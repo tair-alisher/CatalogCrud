@@ -256,3 +256,11 @@ function saveChanges() {
 function confirmDelete() {
     return confirm('Вы уверены, что хотите удалить запись?');
 }
+
+function processing() {
+    $('#loadingDialog').modal();
+}
+
+function closeMessageDiv() {
+    $("#message-div").remove();
+}

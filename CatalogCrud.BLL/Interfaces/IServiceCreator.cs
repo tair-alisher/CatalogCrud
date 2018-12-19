@@ -3,5 +3,7 @@
     public interface IServiceCreator
     {
         IUserService CreateUserService(string connection);
+        ICatalogService CreateCatalogService(string connection);
+        IValueService CreateValueService(string connection);
     }
 }

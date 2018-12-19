@@ -81,7 +81,7 @@ namespace CatalogCrud.BLL.Services
             _worker.Save();
         }
 
-        private void RemoveCatalogValues(Guid id)
+        public void RemoveCatalogValues(Guid id)
         {
             var values = _worker.Values.GetAll().Where(v => v.CatalogId == id).ToList();
             foreach (var value in values)

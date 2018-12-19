@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Загрузка файла";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Загрузка csv файла</h2>
+<p class="text-muted">Загружаемый файл должен быть формата <b class="text-danger">.csv</b> и в кодировке <b class="text-danger">UTF8</b>.</p>
+<p class="text-muted">В качестве разделителя в csv файле должен использоваться символ "<b class="text-danger">|</b>".</p>
+<p class="text-danger">Все старые значения справочника будут удалены и заменены значениями из загружаемого файла.</p>
+<hr />
+@using (Html.BeginForm("Upload", "Catalog", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <input type="hidden" name="catalogId" value="@ViewBag.CatalogId" />
+
+    <div class="form-group">
+        <input type="file" name="file" />
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-primary" value="Загрузить" onclick="processing()" />
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Назад", "Index", null, new { @class = "btn btn-light" })
+</div>
+
+@Html.Partial("~/Views/Shared/Loading.cshtml")
