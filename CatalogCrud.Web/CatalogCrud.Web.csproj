@@ -230,7 +230,7 @@
     <Compile Include="Models\ViewModels\ValueVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\Messages.cs" />
-    <Compile Include="Util\Util.cs" />
+    <Compile Include="Util\Funcs.cs" />
     <Compile Include="Util\WebModule.cs" />
   </ItemGroup>
   <ItemGroup>
