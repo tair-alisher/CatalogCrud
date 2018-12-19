@@ -7,12 +7,13 @@ using CatalogCrud.Web.Util;
 using PagedList;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
 namespace CatalogCrud.Web.Controllers
 {
-    [Authorize(Roles = "admin, catalog_admin, app_admin")]
+    //[Authorize(Roles = "admin, catalog_admin, app_admin")]
     public class CatalogController : Controller
     {
         private ICatalogService CatalogService;
@@ -148,7 +149,7 @@ namespace CatalogCrud.Web.Controllers
         {
             try
             {
-                int ItemsPerPage = 2;
+                int ItemsPerPage = 10;
                 ViewBag.CatalogId = catalogId;
                 ViewBag.Fields = Mapper.Map<IEnumerable<FieldVM>>(CatalogService.GetOrderedCatalogFieldList(catalogId).ToList()).ToList();
 
@@ -161,37 +162,6 @@ namespace CatalogCrud.Web.Controllers
             {
                 return RedirectToRoute(new { controller = "Message", action = "Error", message = Messages.IdIsNull });
             }
-        }
-
-        public ActionResult UploadExcel(Guid catalogId)
-        {
-            ViewBag.CatalogId = catalogId;
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Upload(Guid catalogId)
-        {
-            var file = Request.Files["excelFile"];
-            if (Request.Files["excelFile"].ContentLength > 0)
-            {
-                string[] validFileTypes = { ".xls", ".xlsx" };
-                string fileExt = System.IO.Path.GetExtension(Request.Files["excelFile"].FileName).ToLower();
-
-                if (!validFileTypes.Contains(fileExt))
-                {
-
-                }
-                else
-                {
-                    ModelState.AddModelError("excelFile", "Файл должен быть формата .xls или .xlsx.");
-                }
-            }
-            else
-                ModelState.AddModelError("excelFile", "Выберите файл.");
-
-            return View();
         }
 
         private IEnumerable<RowVM> ConvertDTOValuesByRowsToVMValuesByRows(IEnumerable<IOrderedEnumerable<ValueDTO>> valuesByRows)
@@ -210,6 +180,72 @@ namespace CatalogCrud.Web.Controllers
             }
 
             return rows;
+        }
+
+        public ActionResult UploadFile(Guid catalogId)
+        {
+            ViewBag.CatalogId = catalogId;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Upload(Guid catalogId)
+        {
+            var file = Request.Files["file"];
+            if (file.ContentLength > 0)
+            {
+                string validFileType = ".csv";
+                string fileExt = Path.GetExtension(file.FileName).ToLower();
+
+                if (fileExt == validFileType)
+                {
+                    CatalogService.RemoveCatalogValues(catalogId);
+                    StreamReader csvreader = new StreamReader(file.InputStream);
+                    var csvlines = csvreader.ReadToEnd().Split('\n');
+                    var catalogFields = CatalogService.GetOrderedCatalogFieldList(catalogId);
+                    var csvFields = csvlines[0].Split('|').Select(f => ClearStringAndToLower(f)).ToList();
+                    for (int line = 1; line < csvlines.Length; line++)
+                    {
+                        if (!string.IsNullOrEmpty(csvlines[line]))
+                        {
+                            var values = csvlines[line].Split('|');
+                            for (int value = 0; value < values.Length; value++)
+                            {
+                                var valueField = catalogFields.Where(cf => cf.Name.ToLower() == csvFields[value]).FirstOrDefault();
+                                if (valueField != null)
+                                {
+                                    var valueDTO = new ValueDTO
+                                    {
+                                        Title = values[value], // need to encode in utf8
+                                        Row = line,
+                                        FieldId = valueField.Id,
+                                        CatalogId = catalogId
+                                    };
+                                    ValueService.Add(valueDTO);
+                                }
+                            }
+                        }
+                    }
+
+                    return RedirectToAction("Index");
+                }
+                else
+                    ModelState.AddModelError("file", "Файл должен быть формата <b>.csv</b>.");
+            }
+            else
+                ModelState.AddModelError("excelFile", "Выберите файл.");
+
+            ViewBag.CatalogId = catalogId;
+            return View("UploadFile");
+        }
+
+        private string ClearStringAndToLower(string input)
+        {
+            return input.Replace("\r\n", "")
+                .Replace("\r", "")
+                .Replace("\n", "")
+                .ToLower();
         }
 
         [HttpPost]
