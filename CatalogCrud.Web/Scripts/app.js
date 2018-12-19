@@ -260,3 +260,7 @@ function confirmDelete() {
 function processing() {
     $('#loadingDialog').modal();
 }
+
+function closeMessageDiv() {
+    $("#message-div").remove();
+}

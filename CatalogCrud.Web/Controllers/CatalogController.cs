@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace CatalogCrud.Web.Controllers
@@ -154,7 +155,7 @@ namespace CatalogCrud.Web.Controllers
                 ViewBag.Fields = Mapper.Map<IEnumerable<FieldVM>>(CatalogService.GetOrderedCatalogFieldList(catalogId).ToList()).ToList();
 
                 var valuesByRows = ValueService.GetCatalogValuesByRows(catalogId);
-                var rows = ConvertDTOValuesByRowsToVMValuesByRows(valuesByRows);
+                var rows = Funcs.ConvertDTOValuesByRowsToVMValuesByRows(valuesByRows);
 
                 return View(rows.ToPagedList(page ?? 1, ItemsPerPage));
             }
@@ -162,24 +163,6 @@ namespace CatalogCrud.Web.Controllers
             {
                 return RedirectToRoute(new { controller = "Message", action = "Error", message = Messages.IdIsNull });
             }
-        }
-
-        private IEnumerable<RowVM> ConvertDTOValuesByRowsToVMValuesByRows(IEnumerable<IOrderedEnumerable<ValueDTO>> valuesByRows)
-        {
-            List<RowVM> rows = new List<RowVM>();
-
-            foreach (var valuesByRow in valuesByRows)
-            {
-                var row = new RowVM
-                {
-                    Number = valuesByRow.First().Row
-                };
-                foreach (var valueDTO in valuesByRow)
-                    row.Values.Add(Mapper.Map<ValueVM>(valueDTO));
-                rows.Add(row);
-            }
-
-            return rows;
         }
 
         public ActionResult UploadFile(Guid catalogId)
@@ -201,10 +184,9 @@ namespace CatalogCrud.Web.Controllers
                 if (fileExt == validFileType)
                 {
                     CatalogService.RemoveCatalogValues(catalogId);
-                    StreamReader csvreader = new StreamReader(file.InputStream);
-                    var csvlines = csvreader.ReadToEnd().Split('\n');
+                    var csvlines = Funcs.GetFileContentByLines(file);
                     var catalogFields = CatalogService.GetOrderedCatalogFieldList(catalogId);
-                    var csvFields = csvlines[0].Split('|').Select(f => ClearStringAndToLower(f)).ToList();
+                    var csvFields = csvlines[0].Split('|').Select(f => Funcs.ClearStringAndToLower(f)).ToList();
                     for (int line = 1; line < csvlines.Length; line++)
                     {
                         if (!string.IsNullOrEmpty(csvlines[line]))
@@ -231,21 +213,13 @@ namespace CatalogCrud.Web.Controllers
                     return RedirectToAction("Index");
                 }
                 else
-                    ModelState.AddModelError("file", "Файл должен быть формата <b>.csv</b>.");
+                    TempData["fail"] = "Файл должен быть формата '.csv.'";
             }
             else
-                ModelState.AddModelError("excelFile", "Выберите файл.");
+                TempData["fail"] = "Выберите файл.";
 
             ViewBag.CatalogId = catalogId;
             return View("UploadFile");
-        }
-
-        private string ClearStringAndToLower(string input)
-        {
-            return input.Replace("\r\n", "")
-                .Replace("\r", "")
-                .Replace("\n", "")
-                .ToLower();
         }
 
         [HttpPost]

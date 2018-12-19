@@ -178,7 +178,7 @@ namespace CatalogCrud.BLL.Services
             try
             {
                 DeleteRow(catalogId, rowNumber);
-                DecrementRowsAfterDeleted(rowNumber);
+                DecrementRowsAfterDeleted(catalogId, rowNumber);
 
                 return new OperationDetails(true, "Строка удалена.", "");
             }
@@ -196,9 +196,9 @@ namespace CatalogCrud.BLL.Services
             _worker.Save();
         }
 
-        private void DecrementRowsAfterDeleted(int deletedRow)
+        private void DecrementRowsAfterDeleted(Guid catalogId, int deletedRow)
         {
-            var values = _worker.Values.GetAll().Where(v => v.Row > deletedRow).ToList();
+            var values = _worker.Values.GetAll().Where(v => v.CatalogId == catalogId && v.Row > deletedRow).ToList();
             foreach(var value in values)
             {
                 value.Row -= 1;
