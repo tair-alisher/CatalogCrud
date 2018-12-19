@@ -18,6 +18,7 @@ namespace CatalogCrud.SoapService
 
         public Service()
         {
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             Mapper.Initialize(x =>
             {
                 x.AllowNullCollections = true;
@@ -27,8 +28,8 @@ namespace CatalogCrud.SoapService
             Mapper.Configuration.AssertConfigurationIsValid();
 
             ServiceCreator = new ServiceCreator();
-            CatalogServ = ServiceCreator.CreateCatalogService(Config.Config.ConnectionString);
-            ValueServ = ServiceCreator.CreateValueService(Config.Config.ConnectionString);
+            CatalogServ = ServiceCreator.CreateCatalogService(connectionString);
+            ValueServ = ServiceCreator.CreateValueService(connectionString);
         }
 
         public IEnumerable<Catalog> GetAllCatalogList()
